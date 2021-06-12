@@ -10,11 +10,11 @@ const countriesContainer = document.querySelector('.countries');
   // .then(function (data) { console.log(data) });
   
 
-const renderCounty = function(data) {
+const renderCounty = function(data, className = "") {
     // console.log(data);
     const { flag, name, region, population, languages, currencies } = data;
     const html = `
-      <article class="country">
+      <article class="country ${className}">
       <img class="country__img" src="${flag}" />
       <div class="country__data">
       <h3 class="country__name">${name}</h3>
@@ -26,20 +26,56 @@ const renderCounty = function(data) {
       </article>
     `
     countriesContainer.insertAdjacentHTML("beforeend", html);
-    countriesContainer.style.opacity = 1;
+    // countriesContainer.style.opacity = 1;
+};
+
+const renderError = function (msg) {
+  countriesContainer.insertAdjacentText("beforeend", msg);
+  // countriesContainer.style.opacity = 1;
+};
+
+const getJSON = function (url, errorMsg = "Something went wrong") {
+  return (
+    fetch(url)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`${errorMsg}. Status: ${response.status}`);
+        };
+        return response.json();
+      })
+  );
 };
 
 const getCountryData = function (country) {
-  fetch(`https://restcountries.eu/rest/v2/name/${country}`)
-    // .then( function(response) { console.log(response) } )
-    .then( function(response) { return response.json() } )
-    .then( function(countryData) { renderCounty(countryData[0]) } );
+  getJSON(`https://restcountries.eu/rest/v2/name/${country}`, "Country not found")
+    .then(countryData => {
+      // console.log(countryData[0]);
+      renderCounty(countryData[0]);
+      const neighbour = countryData[0].borders[0];
+      
+      if (!neighbour) throw new Error("Neighbour country not found");
+      return getJSON(`https://restcountries.eu/rest/v2/alpha/${neighbour}`, "Neighbor country not found")
+    })
+    .then(countryData => {
+      // console.log(countryData);
+      return renderCounty(countryData, "neighbour")
+    })
+    .catch(error => {
+      // console.log(error.message);
+      renderError(`Error: ${error.message}`);
+    })
+    .finally(() => {
+      countriesContainer.style.opacity = 1;
+    });
 };
 
-getCountryData("portugal");
-getCountryData("germany");
+btn.addEventListener("click", function () {
+  // console.log("Where am I button clicked");
+  getCountryData("portugal")
+});
 
-
+getCountryData("portugal")
+// getCountryData("japan");
 
 
 // const getCountryData = function (country) {
@@ -72,3 +108,6 @@ getCountryData("germany");
 // getCountryData("portugal");
 // getCountryData("usa");
 // getCountryData("germany");
+
+
+////////////////////// Code Challenge /////////////////////////////////
