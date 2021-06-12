@@ -5,6 +5,70 @@ const countriesContainer = document.querySelector('.countries');
 
 ///////////////////////////////////////
 
+// const lotteryPromise = new Promise(function (resolve, reject) {
+//   console.log("Lottery draw is happening!!!");
+//   setTimeout(function () {
+//     if (Math.random() >= 0.5) {
+//       resolve("You WIN 💰");
+//     } else {
+//       reject(new Error("You Lost your money😭"));
+//     };
+//   }, 3000);
+//   console.log("Good Luck🤞");
+// });
+
+// console.log(lotteryPromise);
+
+// lotteryPromise
+//   .then(resolution => console.log(resolution))
+//   .catch(error => console.error(error));
+
+
+const wait = function (seconds) {
+  return new Promise(function (resolve) {
+    setTimeout(function () {
+      resolve(seconds)
+    }, seconds * 1000)
+  });
+};
+
+wait(1)
+  .then((resolution) => {
+    console.log(resolution);
+    console.log(`I waited ${resolution} seconds`);
+    return wait(2);
+  }).then((resolution) => {
+    console.log(resolution);
+    console.log(`I waited ${resolution} seconds`);
+    return wait(3);
+  }).then((resolution) => {
+    console.log(resolution);
+    console.log(`I waited ${resolution} seconds`);
+    return wait(4);
+  }).then((resolution) => {
+    console.log(resolution);
+    console.log(`I waited ${resolution} seconds`);
+  });
+  
+Promise.resolve("Promise Resolved").then(resolution => console.log(resolution));
+Promise.reject(new Error("Promise Rejected")).catch(error => console.log(error));
+// Promise.reject("Promise Rejected").catch(error => console.log(error));
+
+
+// console.log("Test start");
+
+// setTimeout(() => console.log("0 Sec timer"), 0);
+
+// Promise.resolve("Resolved promise 1")
+//   .then(response => console.log(response));
+
+// console.log("Test end");
+
+
+
+
+
+
 // const request = fetch("https://restcountries.eu/rest/v2/name/portugal")
 //   .then(function (response) { return response.json() })
   // .then(function (data) { console.log(data) });
@@ -112,28 +176,28 @@ btn.addEventListener("click", function () {
 
 ////////////////////// Code Challenge /////////////////////////////////
 
-const whereAmI = function (latitude, longitude) {
+// const whereAmI = function (latitude, longitude) {
   
-  fetch(`https://geocode.xyz/${latitude},${longitude}?geoit=json`)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`Request Throttled.  Over Rate limit (up to 2 per sec): Status: ${403}!`)
-      }
-      return response.json()
-    })
-    .then(object => {
-      // console.log(object);
-      const {city, country} = object;
-      console.log(`You are in ${city}, ${country}`);
+//   fetch(`https://geocode.xyz/${latitude},${longitude}?geoit=json`)
+//     .then(response => {
+//       if (!response.ok) {
+//         throw new Error(`Request Throttled.  Over Rate limit (up to 2 per sec): Status: ${403}!`)
+//       }
+//       return response.json()
+//     })
+//     .then(object => {
+//       // console.log(object);
+//       const {city, country} = object;
+//       console.log(`You are in ${city}, ${country}`);
 
-      getCountryData(`${country.toLowerCase()}`)
-    })
-    .catch(error => console.log(error));
+//       getCountryData(`${country.toLowerCase()}`)
+//     })
+//     .catch(error => console.log(error));
   
-};
+// };
 
 
-whereAmI(52.508, 13.381)
+// whereAmI(52.508, 13.381)
 // whereAmI(19.037, 72.873)
 // whereAmI(-33.933, 18.474)
 // whereAmI(39.0395328,-76.6759214)
