@@ -74,7 +74,7 @@ btn.addEventListener("click", function () {
   getCountryData("portugal")
 });
 
-getCountryData("portugal")
+// getCountryData("portugal")
 // getCountryData("japan");
 
 
@@ -111,3 +111,30 @@ getCountryData("portugal")
 
 
 ////////////////////// Code Challenge /////////////////////////////////
+
+const whereAmI = function (latitude, longitude) {
+  
+  fetch(`https://geocode.xyz/${latitude},${longitude}?geoit=json`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Request Throttled.  Over Rate limit (up to 2 per sec): Status: ${403}!`)
+      }
+      return response.json()
+    })
+    .then(object => {
+      // console.log(object);
+      const {city, country} = object;
+      console.log(`You are in ${city}, ${country}`);
+
+      getCountryData(`${country.toLowerCase()}`)
+    })
+    .catch(error => console.log(error));
+  
+};
+
+
+whereAmI(52.508, 13.381)
+// whereAmI(19.037, 72.873)
+// whereAmI(-33.933, 18.474)
+// whereAmI(39.0395328,-76.6759214)
+  
