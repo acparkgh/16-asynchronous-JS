@@ -121,16 +121,46 @@ const getGeoPosition = function () {
 };
 
 const whereAmINow = async function () {
-  const geoLocationPosition = await getGeoPosition();
-  const { latitude: lat, longitude: lng } = geoLocationPosition.coords;
-  const locationRes = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
-  const countryData = await locationRes.json();
-  const response = await fetch(`https://restcountries.eu/rest/v2/name/${countryData.country}`);
-  const location = await response.json();
-  renderCounty(location[0]);
+  try {
+    const geoLocationPosition = await getGeoPosition();
+    const { latitude: lat, longitude: lng } = geoLocationPosition.coords;
+
+    const locationRes = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+    if(!locationRes.ok) throw new Error("Problem getting location data from GeoCode")
+    const countryData = await locationRes.json();
+
+    const response = await fetch(`https://restcountries.eu/rest/v2/name/${countryData.country}`);
+    if(!response.ok) throw new Error("Probmle getting Country Data")
+    const location = await response.json();
+
+    renderCounty(location[0]);
+  }
+  catch (error) {
+    console.error(error);
+    renderError(error.message)
+  };
 };
 
-whereAmINow("portugal")
+whereAmINow();
+whereAmINow();
+whereAmINow();
+whereAmINow();
+whereAmINow();
+whereAmINow();
+whereAmINow();
+
+// whereAmINow("portugal")
+
+
+
+// try {
+//   let y = 1;
+//   const x = 2;
+//   x = 3;
+// } catch (error) {
+//   console.log(error);
+//   alert(error.message);
+// };
 
 const renderError = function (msg) {
   countriesContainer.insertAdjacentText("beforeend", msg);
