@@ -134,20 +134,50 @@ const whereAmINow = async function () {
     const location = await response.json();
 
     renderCounty(location[0]);
+
+    return `You are in ${countryData.city}, ${countryData.country}`
   }
   catch (error) {
     console.error(error);
-    renderError(error.message)
+    renderError(error.message);
+    throw error
   };
 };
 
-whereAmINow();
-whereAmINow();
-whereAmINow();
-whereAmINow();
-whereAmINow();
-whereAmINow();
-whereAmINow();
+console.log("1: I will get location");
+
+const cityCountryLoc = whereAmINow();
+console.log(cityCountryLoc);
+
+// whereAmINow()
+//   .then(response => console.log(`2: ${response}`))
+//   .catch(error => console.error(`2: ${error.message}`))
+//   .finally(() => console.log("3: Finished getting location"));
+  
+(async function() {
+  try {
+    const response = await whereAmINow();
+    console.log(`2: ${response}`);
+  }
+  catch(error) {
+    console.error(`2: ${error.message}`)
+  }
+  console.log(`3: Finished getting location`);
+})();
+
+
+
+  
+// console.log(cityCountryLoc);
+
+// console.log("3: Finished getting location");
+
+// whereAmINow();
+// whereAmINow();
+// whereAmINow();
+// whereAmINow();
+// whereAmINow();
+// whereAmINow();
 
 // whereAmINow("portugal")
 
