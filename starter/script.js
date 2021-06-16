@@ -144,26 +144,28 @@ const whereAmINow = async function () {
   };
 };
 
-console.log("1: I will get location");
+// console.log("1: I will get location");
 
-const cityCountryLoc = whereAmINow();
-console.log(cityCountryLoc);
+// const cityCountryLoc = whereAmINow();
+// console.log(cityCountryLoc);
 
 // whereAmINow()
 //   .then(response => console.log(`2: ${response}`))
 //   .catch(error => console.error(`2: ${error.message}`))
 //   .finally(() => console.log("3: Finished getting location"));
   
-(async function() {
-  try {
-    const response = await whereAmINow();
-    console.log(`2: ${response}`);
-  }
-  catch(error) {
-    console.error(`2: ${error.message}`)
-  }
-  console.log(`3: Finished getting location`);
-})();
+// (async function() {
+//   try {
+//     const response = await whereAmINow();
+//     console.log(`2: ${response}`);
+//   }
+//   catch(error) {
+//     console.error(`2: ${error.message}`)
+//   }
+//   console.log(`3: Finished getting location`);
+// })();
+
+
 
 
 
@@ -206,10 +208,34 @@ const getJSON = function (url, errorMsg = "Something went wrong") {
       };
       return response.json();
     })
-    );
+  );
+};
+
+const getThreeCountries = async function (c1, c2, c3) {
+  try {
+    // const [resData1] = await getJSON(`https://restcountries.eu/rest/v2/name/${c1}`);
+    // const [resData2] = await getJSON(`https://restcountries.eu/rest/v2/name/${c2}`);
+    // const [resData3] = await getJSON(`https://restcountries.eu/rest/v2/name/${c3}`);
+
+    // const threeCountries = await Promise.all([
+    const countriesData = await Promise.all([
+      getJSON(`https://restcountries.eu/rest/v2/name/${c1}`),
+      getJSON(`https://restcountries.eu/rest/v2/name/${c2}`),
+      getJSON(`https://restcountries.eu/rest/v2/name/${c3}`),
+    ]);
+    // console.log(countriesData);
+    console.log(countriesData.map( (country) => country[0].capital) );
+    // console.log(country1[0].capital, country2[0].capital, country3[0].capital);  
+    // console.log(resData1.capital, resData2.capital, resData3.capital);
+  } catch (error) {
+    console.log(error);
   };
+};
+
+getThreeCountries("portugal", "japan", "germany");
+
   
-  const getCountryData = function (country) {
+const getCountryData = function (country) {
     getJSON(`https://restcountries.eu/rest/v2/name/${country}`, "Country not found")
     .then(countryData => {
       // console.log(countryData[0]);
